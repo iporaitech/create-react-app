@@ -27,6 +27,24 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `npm run build:dev` or `npm run build:dev --watch`
+
+Output bundles in Webpack development mode.
+
+This script can be called with:
+
+`yarn build:dev` to generate bundles once
+
+or
+
+`yarn build:dev --watch` to run Webpack in watch mode.
+
+By default the bundles are generated into build/dev dir but the ENV var CRA_BUILD_DEV_OUTPUT_PATH can be set to specify the output path of the build.
+
+The script just uses the react-scripts webpack.config.js in development mode but removes the `HotModuleReplacementPlugin` because this plugin requires WebpackDevServer to work properly.
+
+This is useful is you want to serve the bundles in development from a backend like Elixir/Phoenix, Ruby on Rails or similar, that already render html templates.
+
 ### `npm run eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
