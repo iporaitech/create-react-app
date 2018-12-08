@@ -39,11 +39,24 @@ or
 
 `yarn build:dev --watch` to run Webpack in watch mode.
 
-By default the bundles are generated into build/dev dir but the ENV var CRA_BUILD_DEV_OUTPUT_PATH can be set to specify the output path of the build.
+By default the bundles are generated into `build/dev` dir of the CRA but this can be changed with the following ENV vars
 
-The script just uses the react-scripts webpack.config.js in development mode but removes the `HotModuleReplacementPlugin` because this plugin requires WebpackDevServer to work properly.
+- `CRA_BUILD_DEV_OUTPUT_PATH` which defaults to `build`
+- `CRA_BUILD_DEV_STATIC_PATH` which defaults to `dev`
 
-This is useful is you want to serve the bundles in development from a backend like Elixir/Phoenix, Ruby on Rails or similar, that already render html templates.
+The script just uses the react-scripts webpack.config.js in `development` mode but removes the `HotModuleReplacementPlugin` because this plugin _requires_ WebpackDevServer to work.
+
+This script is useful if you want to serve the bundles in development from a backend like Elixir/Phoenix, Ruby on Rails or similar, that already render html templates.
+
+#### Example
+
+For a Elixir/Phoenix project you might want to use the following
+
+```bash
+$ export CRA_BUILD_DEV_OUTPUT_OUTPUT=/your/app/priv
+$ export CRA_BUILD_DEV_STATIC_PATH=static
+$ yarn build:dev --watch
+```
 
 ### `npm run eject`
 
