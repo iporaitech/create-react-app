@@ -56,25 +56,36 @@ const writeStatsJson = argv.indexOf('--stats') !== -1;
 const watch = argv.indexOf('--watch') !== -1;
 
 // Generate configuration
-const config = configFactory('development');
+const config = configFactory(
+  'development',
+  process.env.CRA_BUILD_DEV_STATIC_PATH || 'dev'
+);
 
+//
 // Overwrite default CRA webpack config for development
+//
+config.output.path = process.env.CRA_BUILD_DEV_OUTPUT_PATH || paths.appBuild;
 config.entry = paths.appIndexJs; // Just index. We're not using WebpackDevServer
-config.output.filename = 'js/bundle.js';
-config.output.chunkFilename = 'js/[name].chunk.js';
 config.optimization.splitChunks = {
   chunks: 'all',
   name: true, // If false it generates a name that changes on each recompile,
   // when true, generates the name vendor~main.chunk.js and thus, we can put
   // it in script tags in another index.html
 };
-config.output.path =
-  process.env.CRA_BUILD_DEV_OUTPUT_PATH || path.resolve(paths.appBuild, 'dev');
-
 // We need to remove the HotModuleReplacementPlugin because we're not using
 // the bundle in webpack-dev-server or something alike
 config.plugins = config.plugins.filter(
   p => p.constructor.name !== 'HotModuleReplacementPlugin'
+);
+
+// We don't need to generate index.html here
+config.plugins = config.plugins.filter(
+  p => p.constructor.name !== 'HtmlWebpackPlugin'
+);
+
+// We don't need to generate a
+config.plugins = config.plugins.filter(
+  p => p.constructor.name !== 'ManifestPlugin'
 );
 
 // We require that you explicitly set browsers and do not fall back to
