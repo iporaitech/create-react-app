@@ -61,7 +61,11 @@ const sassModuleRegex = /\.module\.(scss|sass)$/;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
-module.exports = function(webpackEnv, staticPath = 'static/') {
+module.exports = function(
+  webpackEnv,
+  staticPrefix = 'static',
+  customPublicPath = '/'
+) {
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
 
@@ -175,13 +179,13 @@ module.exports = function(webpackEnv, staticPath = 'static/') {
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
       filename: isEnvProduction
-        ? `${staticPath}/js/[name].[chunkhash:8].js`
-        : isEnvDevelopment && `${staticPath}/js/bundle.js`,
+        ? path.join(staticPrefix, 'js/[name].[chunkhash:8].js')
+        : isEnvDevelopment && path.join(staticPrefix, 'js/bundle.js'),
       futureEmitAssets: true,
       // There are also additional JS chunk files if you use code splitting.
       chunkFilename: isEnvProduction
-        ? `${staticPath}/js/[name].[chunkhash:8].chunk.js`
-        : isEnvDevelopment && `${staticPath}/js/[name].chunk.js`,
+        ? path.join(staticPrefix, 'js/[name].[chunkhash:8].chunk.js')
+        : isEnvDevelopment && path.join(staticPrefix, 'js/[name].chunk.js'),
       // We inferred the "public path" (such as / or /my-project) from homepage.
       publicPath: paths.publicUrlOrPath,
       // Point sourcemap entries to original disk location (format as URL on Windows)
@@ -385,7 +389,7 @@ module.exports = function(webpackEnv, staticPath = 'static/') {
               loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
-                name: `${staticPath}/media/[name].[hash:8].[ext]`,
+                name: path.join(staticPrefix, 'media/[name].[hash:8].[ext]'),
               },
             },
             // Process application JS with Babel.
@@ -559,7 +563,7 @@ module.exports = function(webpackEnv, staticPath = 'static/') {
               // by webpacks internal loaders.
               exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
               options: {
-                name: `${staticPath}/media/[name].[hash:8].[ext]`,
+                name: path.join(staticPrefix, 'media/[name].[hash:8].[ext]'),
               },
             },
             // ** STOP ** Are you adding a new loader?
@@ -632,8 +636,11 @@ module.exports = function(webpackEnv, staticPath = 'static/') {
         new MiniCssExtractPlugin({
           // Options similar to the same options in webpackOptions.output
           // both options are optional
-          filename: `${staticPath}/css/[name].[contenthash:8].css`,
-          chunkFilename: `${staticPath}/css/[name].[contenthash:8].chunk.css`,
+          filename: path.join(staticPrefix, 'css/[name].[contenthash:8].css'),
+          chunkFilename: path.join(
+            staticPrefix,
+            'css/[name].[contenthash:8].chunk.css'
+          ),
         }),
       // Generate an asset manifest file with the following content:
       // - "files" key: Mapping of all asset filenames to their corresponding

@@ -58,13 +58,15 @@ const watch = argv.indexOf('--watch') !== -1;
 // Generate configuration
 const config = configFactory(
   'development',
-  process.env.CRA_BUILD_DEV_STATIC_PATH || 'dev'
+  process.env.CRA_BUILD_STATIC_PREFIX || '',
+  process.env.CRA_BUILD_PUBLIC_PATH
 );
 
 //
 // Overwrite default CRA webpack config for development
 //
-config.output.path = process.env.CRA_BUILD_DEV_OUTPUT_PATH || paths.appBuild;
+config.output.path =
+  process.env.CRA_BUILD_OUTPUT_PATH || path.resolve(paths.appBuild, 'dev');
 config.entry = paths.appIndexJs; // Just index. We're not using WebpackDevServer
 config.optimization.splitChunks = {
   chunks: 'all',
