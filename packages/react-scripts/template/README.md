@@ -27,53 +27,9 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run build:dev` or `npm run build:dev --watch`
+### `npm run build:dev` | `npm run build:prod`
 
-Output bundles in Webpack development mode.
-
-This script can be called with:
-
-`yarn build:dev` to generate bundles once
-
-or
-
-`yarn build:dev --watch` to run Webpack in watch mode.
-
-This script is useful if you want to serve the bundles in development from a backend like Elixir/Phoenix, Ruby on Rails or similar, that already render html templates.
-
-It uses the react-scripts original webpack.config.js in `development` mode but tweaks some webpack configs to have predictable bundle names and removes:
-
-- `HotModuleReplacementPlugin` because this plugin _requires_ WebpackDevServer to work.
-- `HtmlWebpackPlugin` because the idea of `build:dev` is to put the bundles in your own index.html
-- `ManifestPlugin` because so far we didn't need it when working on our custom backend in development.
-
-By default the bundles are generated into `build/dev` dir of the CRA but this can be changed with the following ENV vars
-
-- `CRA_BUILD_OUTPUT_PATH` this variable sets the value of webpack's `output.path` and defaults to `build/dev` dir at the root of the CRA.
-
-- `CRA_BUILD_STATIC_PREFIX` it defaults to an empty string. Set this value to `static` if you want to get file and chunk names similar to the original CRA react-scripts, i.e.: `static/js/bundles.js`
-
-- `CRA_BUILD_PUBLIC_PATH` it sets publicPath in webpack config. It defaults to `/`.
-
-#### Example
-
-For a Elixir/Phoenix project you might want to use the following
-
-```bash
-$ export CRA_BUILD_OUTPUT_PATH=/your/app/priv/static
-$ yarn build:dev --watch
-```
-
-And then add the script to your layout template
-
-```html
-<body>
-  <!-- your body stuff here -->
-  <script src="<%= static_path(@conn, "/js/bundle.js") %>"></script>
-  <script src="<%= static_path(@conn, "/js/vendors~main.chunk.js") %>"></script>
-  <script src="<%= static_path(@conn, "/js/main.chunk.js") %>"></script>
-</body>
-```
+See [this README](https://github.com/iporaitech/create-react-app/blob/iporaitech-react-scripts/packages/react-scripts/README.md) for info about these scripts
 
 ### `npm run eject`
 
