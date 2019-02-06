@@ -1,7 +1,7 @@
 {
   "name": "@iporaitech/react-scripts",
-  "version": "2.4.0",
-  "description": "Configuration and scripts for Create React App.",
+  "version": "2.4.1",
+  "description": "Configuration and scripts for Create React App (based on react-scripts@2.1.3)",
   "repository": "iporaitech/create-react-app",
   "license": "MIT",
   "engines": {
