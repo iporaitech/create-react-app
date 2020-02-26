@@ -81,10 +81,10 @@ config.output.publicPath = process.env.CRA_BUILD_PUBLIC_PATH || '/';
 // Assets manifest should be handled by the backend API. i.e.: `mix phx.digest`
 config.output.filename = 'js/bundle.js';
 
-// Use chunkhash in chunFilename in production to support code-splitting
+// Use contenthash in chunFilename in production to support code-splitting
 config.output.chunkFilename =
   mode === 'production'
-    ? 'js/[name].[chunkhash:8].chunk.js'
+    ? 'js/[name].[contenthash:8].chunk.js'
     : 'js/[name].chunk.js';
 
 // Just index. We're not using WebpackDevServer
@@ -153,7 +153,7 @@ config.plugins = config.plugins.filter(
   p => p.constructor.name !== 'ManifestPlugin'
 );
 
-// Avoid using chunkhash in chunkFilename of initial chunks.
+// Avoid using contenthash in chunkFilename of initial chunks.
 // See https://github.com/webpack/webpack/issues/6598
 // Without this we need to update the index.html for each new build
 class ChunkNamesPlugin {
