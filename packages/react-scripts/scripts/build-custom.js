@@ -10,7 +10,6 @@
 
 // Process CLI arguments
 const argv = process.argv.slice(2);
-const writeStatsJson = argv.indexOf('--stats') !== -1;
 const watch = argv.indexOf('--watch') !== -1;
 const mode = argv[0];
 
@@ -49,7 +48,6 @@ const path = require('path');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const webpack = require('webpack');
-const bfj = require('bfj');
 const configFactory = require('../config/webpack.config');
 const paths = require('../config/paths');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
@@ -309,19 +307,25 @@ function buildCustom() {
         }
         return reject(new Error(messages.errors.join('\n\n')));
       }
-
-      const resolveArgs = {
-        stats,
-        warnings: messages.warnings,
-      };
-      if (writeStatsJson) {
-        return bfj
-          .write(paths.appBuild + '/bundle-stats.json', stats.toJson())
-          .then(() => resolve(resolveArgs))
-          .catch(error => reject(new Error(error)));
+      if (
+        process.env.CI &&
+        (typeof process.env.CI !== 'string' ||
+          process.env.CI.toLowerCase() !== 'false') &&
+        messages.warnings.length
+      ) {
+        console.log(
+          chalk.yellow(
+            '\nTreating warnings as errors because process.env.CI = true.\n' +
+              'Most CI servers set it automatically.\n'
+          )
+        );
+        return reject(new Error(messages.warnings.join('\n\n')));
       }
 
-      return resolve(resolveArgs);
+      return resolve({
+        stats,
+        warnings: messages.warnings,
+      });
     })
   ).then(
     ({ warnings }) => {
